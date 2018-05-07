@@ -17,8 +17,11 @@ import android.widget.Toast;
 
 import com.example.clabuyakchai.brushtrainingsimulator.database.DBQuery;
 import com.example.clabuyakchai.brushtrainingsimulator.model.UserStatistics;
+import com.example.clabuyakchai.brushtrainingsimulator.service.MyIntentService;
+import com.example.clabuyakchai.brushtrainingsimulator.sharedpreferences.Preferences;
 import com.example.clabuyakchai.brushtrainingsimulator.stateinternet.StateInternet;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -74,13 +77,19 @@ public class SimulatorFragment extends Fragment implements SensorEventListener {
         mFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO
                 stopListenerAccelerometr();
 
+                UserStatistics statistics = new UserStatistics(countBefore, new Date().getTime(),
+                        Preferences.getUsernameSharedPreferences(getActivity()));
+
+                DBQuery dbQuery = new DBQuery(getActivity());
+                dbQuery.addStatistics(statistics);
+
+                //TODO
                 if(StateInternet.hasConnection(getActivity())){
-                    Toast.makeText(getActivity(), "est", Toast.LENGTH_SHORT).show();
+                    MyIntentService.startActionUploadStatistics(getActivity());
                 } else {
-                    Toast.makeText(getActivity(), "net", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.error_internet_connection, Toast.LENGTH_SHORT).show();
                 }
             }
         });

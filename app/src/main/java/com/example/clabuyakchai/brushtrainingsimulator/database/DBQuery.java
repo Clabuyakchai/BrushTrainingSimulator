@@ -89,6 +89,10 @@ public class DBQuery {
     public void addAllStatistics(List<UserStatistics> listStatistics){
         SQLiteDatabase db = mDBHelper.getWritableDatabase();
 
+        //TODO
+        //DELETE
+//        listStatistics = addTest();
+
         ContentValues contentValues = new ContentValues();
 
         for (int i = 0; i < listStatistics.size(); i++){
@@ -105,15 +109,15 @@ public class DBQuery {
     //TODO
 //    public List<UserStatistics> addTest(){
 //        List<UserStatistics> list = new ArrayList<>();
-//        list.add(new UserStatistics(100, 1525610353L, "client"));
-//        list.add(new UserStatistics(200, 1525610353L, "client"));
+//        list.add(new UserStatistics(20, 1525610353L, "client"));
+//        list.add(new UserStatistics(600, 1525610353L, "client"));
 //        list.add(new UserStatistics(300, 1525610353L, "client"));
 //        list.add(new UserStatistics(400, 1525610353L, "client"));
-//        list.add(new UserStatistics(500, 1525610353L, "client"));
+//        list.add(new UserStatistics(30, 1525610353L, "client"));
 //        list.add(new UserStatistics(600, 1525610353L, "client"));
-//        list.add(new UserStatistics(700, 1525610353L, "client"));
+//        list.add(new UserStatistics(70, 1525610353L, "client"));
 //        list.add(new UserStatistics(800, 1525610353L, "client"));
-//        list.add(new UserStatistics(900, 1525610353L, "client"));
+//        list.add(new UserStatistics(10, 1525610353L, "client"));
 //
 //        return list;
 //    }

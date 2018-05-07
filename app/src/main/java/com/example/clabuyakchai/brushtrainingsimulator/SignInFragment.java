@@ -65,39 +65,43 @@ public class SignInFragment extends Fragment {
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UserLogin user = new UserLogin();
-                user.setUsername(mUsername.getText().toString());
-                user.setPassword(mPassword.getText().toString());
+                if(StateInternet.hasConnection(getActivity())){
+                    UserLogin user = new UserLogin();
+                    user.setUsername(mUsername.getText().toString());
+                    user.setPassword(mPassword.getText().toString());
 
-                ApiService service = Client.getApiService();
-                Call<ResponseBody> call = service.signin(user);
+                    ApiService service = Client.getApiService();
+                    Call<ResponseBody> call = service.signin(user);
 
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if(response.isSuccessful()){
-                            String token = null;
-                            try {
-                                token = response.body().string();
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if(response.isSuccessful()){
+                                String token = null;
+                                try {
+                                    token = response.body().string();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                Preferences.setTokenSharedPreferences(getActivity(), "Bearer " + token);
+                                Preferences.setUsernameSharedPreferences(getActivity(), user.getUsername().toString());
+
+                                startActivity(MainActivity.newIntent(getActivity()));
+
+                            } else {
+                                Toast.makeText(getActivity(), "Invalid username or password", Toast.LENGTH_SHORT).show();
                             }
-
-                            Preferences.setTokenSharedPreferences(getActivity(), token);
-                            Preferences.setUsernameSharedPreferences(getActivity(), user.getUsername().toString());
-
-                            startActivity(MainActivity.newIntent(getActivity()));
-
-                        } else {
-                            Toast.makeText(getActivity(), "Invalid username or password", Toast.LENGTH_SHORT).show();
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(getActivity(), "onFailure", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Toast.makeText(getActivity(), "onFailure", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Toast.makeText(getActivity(), R.string.error_internet_connection, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

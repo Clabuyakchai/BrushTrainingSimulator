@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.clabuyakchai.brushtrainingsimulator.api.ApiService;
 import com.example.clabuyakchai.brushtrainingsimulator.api.Client;
 import com.example.clabuyakchai.brushtrainingsimulator.model.UserRegistration;
+import com.example.clabuyakchai.brushtrainingsimulator.stateinternet.StateInternet;
 import com.example.clabuyakchai.brushtrainingsimulator.validator.RegistrationValidator;
 
 import okhttp3.ResponseBody;
@@ -72,35 +73,38 @@ public class SignUpFragment extends Fragment {
         mJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UserRegistration user = new UserRegistration(mUsername.getText().toString(),
-                        mEmail.getText().toString(),
-                        mPassword.getText().toString());
+                if (StateInternet.hasConnection(getActivity())){
+                    UserRegistration user = new UserRegistration(mUsername.getText().toString(),
+                            mEmail.getText().toString(),
+                            mPassword.getText().toString());
 
-                String message = RegistrationValidator.userValidation(user);
-                if(message == null){
-                    ApiService service = Client.getApiService();
-                    Call<ResponseBody> call = service.signup(user);
+                    String message = RegistrationValidator.userValidation(user);
+                    if (message == null) {
+                        ApiService service = Client.getApiService();
+                        Call<ResponseBody> call = service.signup(user);
 
-                    call.enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            if (response.isSuccessful()){
-                                backSignIn();
-                            } else {
-                                Toast.makeText(getActivity(), "Someone already has that username.", Toast.LENGTH_SHORT).show();
+                        call.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (response.isSuccessful()) {
+                                    backSignIn();
+                                } else {
+                                    Toast.makeText(getActivity(), "Someone already has that username.", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Toast.makeText(getActivity(), "onFailure", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                Toast.makeText(getActivity(), "onFailure", Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
+                    } else {
+                        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.error_internet_connection, Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 

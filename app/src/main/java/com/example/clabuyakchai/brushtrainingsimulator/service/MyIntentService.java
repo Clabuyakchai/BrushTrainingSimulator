@@ -59,6 +59,10 @@ public class MyIntentService extends IntentService {
         String username = Preferences.getUsernameSharedPreferences(MyIntentService.this);
         String token = Preferences.getTokenSharedPreferences(MyIntentService.this);
 
+        if(username == null){
+            return;
+        }
+
         DBQuery dbQuery = new DBQuery(MyIntentService.this);
 
         List<UserStatistics> list = null;
