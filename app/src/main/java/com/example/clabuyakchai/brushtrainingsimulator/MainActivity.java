@@ -2,6 +2,7 @@ package com.example.clabuyakchai.brushtrainingsimulator;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,9 +14,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.clabuyakchai.brushtrainingsimulator.service.MyIntentService;
 import com.example.clabuyakchai.brushtrainingsimulator.sharedpreferences.Preferences;
+import com.example.clabuyakchai.brushtrainingsimulator.soap.SOAPRequest;
 import com.example.clabuyakchai.brushtrainingsimulator.stateinternet.StateInternet;
 
 /**
@@ -71,6 +74,13 @@ public class MainActivity extends AppCompatActivity
                 Preferences.setTokenSharedPreferences(MainActivity.this, null);
                 startActivity(LoginActivity.newIntent(MainActivity.this));
                 break;
+            case R.id.nav_information:
+                if(StateInternet.hasConnection(MainActivity.this)){
+                    new InformationAsyncTask().execute();
+                } else {
+                    Toast.makeText(MainActivity.this, R.string.error_internet_connection, Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
 
         item.setChecked(true);
@@ -105,5 +115,20 @@ public class MainActivity extends AppCompatActivity
         return new Intent(context, MainActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    public class InformationAsyncTask extends AsyncTask<Void, Void, String>{
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String response = SOAPRequest.requestSoap();
+
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+        }
     }
 }
