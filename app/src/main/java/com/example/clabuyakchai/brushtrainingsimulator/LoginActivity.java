@@ -17,8 +17,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         //TODO
-//        Preferences.setTokenSharedPreferences(LoginActivity.this, "jvnfbniudv");
-//        Preferences.setUsernameSharedPreferences(LoginActivity.this, "client");
+        Preferences.setTokenSharedPreferences(LoginActivity.this, "jvnfbniudv");
+        Preferences.setUsernameSharedPreferences(LoginActivity.this, "client");
 
         String token = Preferences.getTokenSharedPreferences(LoginActivity.this);
 

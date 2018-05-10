@@ -7,14 +7,16 @@ package com.example.clabuyakchai.brushtrainingsimulator.model;
 public class UserStatistics {
     private Integer counter;
     private Long data;
+    private String description;
     private String username;
 
     public UserStatistics() {
     }
 
-    public UserStatistics(Integer counter, Long data, String username) {
+    public UserStatistics(Integer counter, Long data, String description, String username) {
         this.counter = counter;
         this.data = data;
+        this.description = description;
         this.username = username;
     }
 
@@ -32,6 +34,14 @@ public class UserStatistics {
 
     public void setData(Long data) {
         this.data = data;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getUsername() {

@@ -79,7 +79,7 @@ public class SimulatorFragment extends Fragment implements SensorEventListener {
             public void onClick(View view) {
                 stopListenerAccelerometr();
 
-                UserStatistics statistics = new UserStatistics(countBefore, new Date().getTime(),
+                UserStatistics statistics = new UserStatistics(100, new Date().getTime(), "Nice",
                         Preferences.getUsernameSharedPreferences(getActivity()));
 
                 DBQuery dbQuery = new DBQuery(getActivity());

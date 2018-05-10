@@ -12,6 +12,7 @@ public class DBShema {
             public static final String id = "id";
             public static final String counter = "counter";
             public static final String data = "data";
+            public static final String description = "description";
             public static final String username = "username";
         }
     }

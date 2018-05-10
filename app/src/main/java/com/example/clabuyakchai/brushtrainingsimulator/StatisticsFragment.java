@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.clabuyakchai.brushtrainingsimulator.database.DBQuery;
 import com.example.clabuyakchai.brushtrainingsimulator.model.UserStatistics;
@@ -62,6 +63,7 @@ public class StatisticsFragment extends Fragment {
         private UserStatistics mStatistics;
 
         private ImageView mImageView;
+        private TextView mDesription;
         private TextView mCounter;
         private TextView mData;
 
@@ -69,12 +71,21 @@ public class StatisticsFragment extends Fragment {
             super(itemView);
 
             mImageView = itemView.findViewById(R.id.level);
+            mDesription = itemView.findViewById(R.id.descriptionListItem);
             mCounter = itemView.findViewById(R.id.counterListItem);
             mData = itemView.findViewById(R.id.dataListItem);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(getActivity(), mStatistics.getDescription(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         public void bind(UserStatistics statistics){
             this.mStatistics = statistics;
+            mDesription.setText(statistics.getDescription().toString());
             mCounter.setText(String.valueOf(mStatistics.getCounter()));
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             mData.setText(dateFormat.format(mStatistics.getData()));

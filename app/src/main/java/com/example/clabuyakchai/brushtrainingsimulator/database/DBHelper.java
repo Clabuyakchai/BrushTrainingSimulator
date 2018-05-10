@@ -25,6 +25,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + Table.Cols.id +" integer primary key autoincrement" + ", "
                 + Table.Cols.counter + " integer, "
                 + Table.Cols.data + " integer, "
+                + Table.Cols.description + ", "
                 + Table.Cols.username
                 + ")"
         );
@@ -32,6 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE " + Table.NAME);
+        onCreate(db);
     }
 }

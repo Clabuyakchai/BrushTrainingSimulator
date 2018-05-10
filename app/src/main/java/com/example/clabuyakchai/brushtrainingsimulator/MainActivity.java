@@ -13,7 +13,10 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.clabuyakchai.brushtrainingsimulator.service.MyIntentService;
@@ -34,6 +37,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //TODO службы временно отключены
         if (StateInternet.hasConnection(MainActivity.this)) {
@@ -47,7 +53,7 @@ public class MainActivity extends AppCompatActivity
 
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(MainActivity.this,
-                drawer, R.string.navigation_drawer_open,
+                drawer, toolbar,R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
 
         drawer.addDrawerListener(toggle);
@@ -55,6 +61,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View header = navigationView.getHeaderView(0);
+        TextView mUsername = header.findViewById(R.id.headerUsername);
+        mUsername.setText(Preferences.getUsernameSharedPreferences(MainActivity.this));
 
         startFragment(InstructionFragment.class);
     }
@@ -69,17 +79,17 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_statistics:
                 startFragment(StatisticsFragment.class);
                 break;
-            case R.id.nav_logout:
-                Preferences.setUsernameSharedPreferences(MainActivity.this, null);
-                Preferences.setTokenSharedPreferences(MainActivity.this, null);
-                startActivity(LoginActivity.newIntent(MainActivity.this));
-                break;
             case R.id.nav_information:
                 if(StateInternet.hasConnection(MainActivity.this)){
                     new InformationAsyncTask().execute();
                 } else {
                     Toast.makeText(MainActivity.this, R.string.error_internet_connection, Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case R.id.nav_logout:
+                Preferences.setUsernameSharedPreferences(MainActivity.this, null);
+                Preferences.setTokenSharedPreferences(MainActivity.this, null);
+                startActivity(LoginActivity.newIntent(MainActivity.this));
                 break;
         }
 

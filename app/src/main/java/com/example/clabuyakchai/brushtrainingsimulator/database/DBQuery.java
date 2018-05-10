@@ -47,7 +47,7 @@ public class DBQuery {
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
 
         Cursor cursor = db.query(DBShema.Table.NAME,
-                new String[]{DBShema.Table.Cols.counter, DBShema.Table.Cols.data, DBShema.Table.Cols.username},
+                new String[]{DBShema.Table.Cols.counter, DBShema.Table.Cols.data, DBShema.Table.Cols.description, DBShema.Table.Cols.username},
                 selection,
                 selectionArgs,
                 null,null, null);
@@ -61,7 +61,8 @@ public class DBQuery {
             UserStatistics statistics = new UserStatistics();
             statistics.setCounter(cursor.getInt(0));
             statistics.setData(cursor.getLong(1));
-            statistics.setUsername(cursor.getString(2));
+            statistics.setDescription(cursor.getString(2));
+            statistics.setUsername(cursor.getString(3));
 
             list.add(statistics);
 
@@ -80,6 +81,7 @@ public class DBQuery {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DBShema.Table.Cols.counter, statistics.getCounter());
         contentValues.put(DBShema.Table.Cols.data, statistics.getData());
+        contentValues.put(DBShema.Table.Cols.description, statistics.getDescription());
         contentValues.put(DBShema.Table.Cols.username, statistics.getUsername());
 
         db.insert(DBShema.Table.NAME, null, contentValues);
@@ -98,6 +100,7 @@ public class DBQuery {
         for (int i = 0; i < listStatistics.size(); i++){
             contentValues.put(DBShema.Table.Cols.counter, listStatistics.get(i).getCounter());
             contentValues.put(DBShema.Table.Cols.data, listStatistics.get(i).getData());
+            contentValues.put(DBShema.Table.Cols.description, listStatistics.get(i).getDescription());
             contentValues.put(DBShema.Table.Cols.username, listStatistics.get(i).getUsername());
 
             db.insert(DBShema.Table.NAME, null, contentValues);

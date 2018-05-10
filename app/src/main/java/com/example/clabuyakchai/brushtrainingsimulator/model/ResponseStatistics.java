@@ -7,6 +7,7 @@ package com.example.clabuyakchai.brushtrainingsimulator.model;
 public class ResponseStatistics {
     private Integer counter;
     private Long data;
+    private String description;
 
     public Integer getCounter() {
         return counter;
@@ -22,5 +23,13 @@ public class ResponseStatistics {
 
     public void setData(Long data) {
         this.data = data;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

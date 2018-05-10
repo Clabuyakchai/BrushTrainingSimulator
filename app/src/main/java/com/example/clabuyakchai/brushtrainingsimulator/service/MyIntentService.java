@@ -85,6 +85,7 @@ public class MyIntentService extends IntentService {
                                 UserStatistics userStatistics = new UserStatistics();
                                 userStatistics.setCounter(responseStatistics.getCounter());
                                 userStatistics.setData(responseStatistics.getData());
+                                userStatistics.setDescription(responseStatistics.getDescription());
                                 userStatistics.setUsername(username);
 
                                 list.add(userStatistics);
