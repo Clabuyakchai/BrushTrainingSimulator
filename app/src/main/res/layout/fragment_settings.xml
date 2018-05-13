@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res/com.example.clabuyakchai.brushtrainingsimulator"
+    xmlns:app1="http://schemas.android.com/apk/res-auto">
+
+    <Switch
+        android:id="@+id/settingSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="50dp"
+        android:checked="true"
+        app1:layout_constraintEnd_toEndOf="parent"
+        app1:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.clabuyakchai.brushtrainingsimulator.CircularSeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="310dp"
+        android:layout_height="310dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app1:circle_color="@color/seekBarCircle"
+        app1:circle_progress_color="@color/seekBarPointer"
+        app1:circle_stroke_width="2dp"
+        app1:layout_constraintBottom_toBottomOf="parent"
+        app1:layout_constraintEnd_toEndOf="parent"
+        app1:layout_constraintStart_toStartOf="parent"
+        app1:layout_constraintTop_toTopOf="parent"
+        app1:layout_constraintVertical_bias="0.327"
+        app:circle_x_radius="150dp"
+        app:circle_y_radius="150dp"
+        app:end_angle="60"
+        app:max="300"
+        app:pointer_alpha_ontouch="100"
+        app:pointer_color="@color/seekBarPointer"
+        app:pointer_halo_color="#f78fe3"
+        app:progress="10"
+        app:start_angle="120"
+        app:use_custom_radii="true"/>
+
+    <TextView
+        android:id="@+id/displayCounter"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        app1:layout_constraintBottom_toBottomOf="parent"
+        app1:layout_constraintEnd_toEndOf="parent"
+        app1:layout_constraintStart_toStartOf="parent"
+        app1:layout_constraintTop_toTopOf="parent"
+        app1:layout_constraintVertical_bias="0.425"
+        tools:ignore="UnknownId"
+        tools:text="100" />
+
+    <TextView
+        android:id="@+id/setting_inscription"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/settings_max_counter"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app1:layout_constraintBottom_toBottomOf="parent"
+        app1:layout_constraintEnd_toEndOf="parent"
+        app1:layout_constraintStart_toStartOf="parent"
+        app1:layout_constraintTop_toTopOf="parent"
+        app1:layout_constraintVertical_bias="0.8"
+        tools:ignore="MissingConstraints" />
+
+
+</android.support.constraint.ConstraintLayout>

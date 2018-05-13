@@ -12,6 +12,8 @@ public class Preferences {
     private static final String PREF_USERNAME = "username";
     private static final String PREF_TOKEN = "token";
     private static final String PREF_DATA = "data";
+    private static final String PREF_SETTINGS_COUNT = "max_counter";
+    private static final String PREF_SETTINGS_INFINITY = "infinity";
 
     public static String getUsernameSharedPreferences(Context context){
         return PreferenceManager
@@ -53,6 +55,34 @@ public class Preferences {
                 .getDefaultSharedPreferences(context)
                 .edit()
                 .putLong(PREF_DATA, data)
+                .apply();
+    }
+
+    public static int getSettingCounterSharedPreferences(Context context){
+        return PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getInt(PREF_SETTINGS_COUNT, 10);
+    }
+
+    public static void setSettingCounterSharedPreferences(Context context, int counter){
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit()
+                .putInt(PREF_SETTINGS_COUNT, counter)
+                .apply();
+    }
+
+    public static boolean getSettingInfinityOrNoSharedPreferences(Context context){
+        return PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getBoolean(PREF_SETTINGS_INFINITY, true);
+    }
+
+    public static void setSettingInfinityOrNoSharedPreferences(Context context, boolean bool){
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(PREF_SETTINGS_INFINITY, bool)
                 .apply();
     }
 }

@@ -8,10 +8,13 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,73 +27,64 @@ import com.example.clabuyakchai.brushtrainingsimulator.stateinternet.StateIntern
 import java.util.Date;
 import java.util.List;
 
+import static android.content.Context.SENSOR_SERVICE;
+
 /**
  * Created by Clabuyakchai on 05.05.2018.
  */
 
-public class SimulatorFragment extends Fragment implements SensorEventListener {
+public class SimulatorFragment extends Fragment {
 
-    /** Объект типа сенсор менеджер */
     private SensorManager mSensorManager;
-    /** Создали объект типа сенсор для получения данных угла наклона телефона */
     private Sensor mAccelerometerSensor;
+    private boolean isPresent = false;
 
-    private TextView mCounter;
+    private boolean state1 = false;
+    private boolean state2 = false;
+    private boolean state3 = false;
+    private boolean state4 = false;
 
+    private TextView mTextViewProgress;
+    private ProgressBar mProgressBar;
     private Button mFinish;
 
-    private int countBefore = 0;
-    private int countAfter = 0;
-    private boolean xRotate = false;
-    private boolean yRotate = false;
+    private int mProgress = 0;
+    private int MAX_VALUE = 0;
+    private String value = null;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_simulator, container, false);
 
-        mCounter = view.findViewById(R.id.counter);
-
+        mTextViewProgress = view.findViewById(R.id.progress);
+        mProgressBar = view.findViewById(R.id.progressBar);
         mFinish = view.findViewById(R.id.finishTrening);
 
-        // присвоили менеджеру работу с серсором
-        mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-        // создали список сенсоров для записи и сортировки
-        List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
-        // делаем проверку если больше нуля значит все хорошо и начинаем обрабатывать работу датчика
-        if (sensors.size() > 0) {
-            // форич для зацикливания работы, что бы не единожды выполнялось, а постоянно
-            for (Sensor sensor : sensors) {
-                // берем данные с акселерометра
-                switch (sensor.getType()) {
-                    case Sensor.TYPE_ACCELEROMETER:
-                        // если пусто значит возвращаем значения сенсора
-                        if (mAccelerometerSensor == null)
-                            mAccelerometerSensor = sensor;
-                        break;
-                    default:
-                        break;
-                }
-            }
+        if(Preferences.getSettingInfinityOrNoSharedPreferences(getActivity())) {
+            MAX_VALUE = Preferences.getSettingCounterSharedPreferences(getActivity());
+            value = String.valueOf(MAX_VALUE);
+            mProgressBar.setMax(MAX_VALUE);
+        } else {
+            MAX_VALUE = -1;
+            value = getResources().getString(R.string.infinity);
+            mProgressBar.setMax(Integer.MAX_VALUE);
+        }
+
+        mTextViewProgress.setText("0/" + value);
+
+        mSensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
+        List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
+
+        if(sensors.size() > 0){
+            isPresent = true;
+            mAccelerometerSensor = sensors.get(0);
         }
 
         mFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                stopListenerAccelerometr();
-
-                UserStatistics statistics = new UserStatistics(100, new Date().getTime(), "Nice",
-                        Preferences.getUsernameSharedPreferences(getActivity()));
-
-                DBQuery dbQuery = new DBQuery(getActivity());
-                dbQuery.addStatistics(statistics);
-
-                //TODO
-                if(StateInternet.hasConnection(getActivity())){
-                    MyIntentService.startActionUploadStatistics(getActivity());
-                } else {
-                    Toast.makeText(getActivity(), R.string.error_internet_connection, Toast.LENGTH_SHORT).show();
-                }
+                autofinish();
             }
         });
 
@@ -98,63 +92,82 @@ public class SimulatorFragment extends Fragment implements SensorEventListener {
     }
 
     @Override
-    public void onPause() {
-        stopListenerAccelerometr();
-        super.onPause();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-        //регистрируем сенсоры в объекты сенсора
-        mSensorManager.registerListener(this, mAccelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
-//        mSensorManager.registerListener(this, mMagneticFieldSensor, SensorManager.SENSOR_DELAY_GAME);
+        if(isPresent){
+            mSensorManager.registerListener(listn, mAccelerometerSensor, SensorManager.SENSOR_DELAY_FASTEST);
+        }
     }
 
     @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-        //создали массив в которые будем записывать наши данные полученые с датчиков
-        float[] values = sensorEvent.values;
-        switch (sensorEvent.sensor.getType()) {
-            case Sensor.TYPE_ACCELEROMETER: {
-                //собственно выводим все полученые параметры в текствьюшки наши
-                countRotate(sensorEvent);
+    public void onPause() {
+        super.onPause();
+        if(isPresent){
+            stopListenerAccelerometr();
+        }
+    }
+
+    SensorEventListener listn = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent sensorEvent) {
+            float x = sensorEvent.values[0];
+            float y = sensorEvent.values[1];
+            float z = sensorEvent.values[2];
+
+            if(9 <= y && y <= 10 && -3 <= z && z <= 5 && !state1){
+                state1 = true;
+            }else if(8.5 <= x && x <= 10 && -2 <= y && y <= 2 && state1 && !state2){
+                state2 = true;
+            } else if(-10 <= y && y <= -2 && -9 <= z && z <= 0 && state1 && state2 && !state3){
+                state3 = true;
+            } else if(-3 <= z && z <= 2 && state1 && state2 && state3){
+                state4 = true;
+            } else if(9 <= y && y <= 10 && -3 <= z && z <= 3 && state1 && state2 && state3 && state4){
+                mProgress++;
+                if (mProgress < MAX_VALUE) {
+                    mProgressBar.setProgress(mProgress);
+                    mTextViewProgress.setText(mProgress + " /" + value);
+                } else if (mProgress == MAX_VALUE){
+                    autofinish();
+                }
+                state1 = false;
+                state2 = false;
+                state3 = false;
+                state4 = false;
             }
-            break;
         }
-    }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
-    }
-
-    private void countRotate(SensorEvent event){
-        if(9 <= event.values[0] && event.values[0] <= 10){
-            xRotate = true;
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int i) {
 
         }
-        if (-10 <= event.values[1] && event.values[1] <= -3.5 && xRotate){
-            countAfter = countBefore;
-            countAfter++;
-            xRotate = false;
-            yRotate = true;
-        }
-        if(8.5 <= event.values[1] && event.values[1] <= 10 && !xRotate && yRotate){
-            setCounterText();
-            yRotate = false;
-        }
-    }
+    };
 
-    private void setCounterText(){
-        if(countAfter - countBefore == 1){
-            countBefore++;
-            mCounter.setText(String.valueOf(countBefore));
+    public void autofinish(){
+        stopListenerAccelerometr();
+
+        mProgressBar.setProgress(0);
+
+        UserStatistics statistics = new UserStatistics(mProgress, new Date().getTime(), "Nice",
+                Preferences.getUsernameSharedPreferences(getActivity()));
+
+        DBQuery dbQuery = new DBQuery(getActivity());
+        dbQuery.addStatistics(statistics);
+
+        if(StateInternet.hasConnection(getActivity())){
+            MyIntentService.startActionUploadStatistics(getActivity());
+        } else {
+            Toast.makeText(getActivity(), R.string.error_internet_connection, Toast.LENGTH_SHORT).show();
         }
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.popBackStack();
+        FragmentTransaction mFragmentTransaction = getFragmentManager().beginTransaction();
+        mFragmentTransaction.replace(R.id.fragment_container_main, new InstructionFragment()).commit();
     }
 
     public void stopListenerAccelerometr(){
-        mSensorManager.unregisterListener(this);
+        mSensorManager.unregisterListener(listn);
     }
 
     public static SimulatorFragment newInstance(){

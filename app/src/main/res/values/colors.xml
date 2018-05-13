@@ -7,7 +7,7 @@
     <color name="colorGreyTint">#7f7e7e</color>
     <color name="colorGrey">#b8b7b6</color>
     <color name="coloroBlack">#000000</color>
-
-
+    <color name="seekBarCircle">#ffe5fa</color>
+    <color name="seekBarPointer">#c91295</color>
 
 </resources>

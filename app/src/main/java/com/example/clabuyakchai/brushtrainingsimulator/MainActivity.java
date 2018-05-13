@@ -79,6 +79,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_statistics:
                 startFragment(StatisticsFragment.class);
                 break;
+            case R.id.nav_settings:
+                startFragment(SettingsFragment.class);
+                break;
             case R.id.nav_information:
                 if(StateInternet.hasConnection(MainActivity.this)){
                     new InformationAsyncTask().execute();
