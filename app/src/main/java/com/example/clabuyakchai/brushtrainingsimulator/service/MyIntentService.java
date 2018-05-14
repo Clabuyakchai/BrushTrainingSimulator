@@ -3,6 +3,7 @@ package com.example.clabuyakchai.brushtrainingsimulator.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.widget.Toast;
 
 import com.example.clabuyakchai.brushtrainingsimulator.api.ApiService;

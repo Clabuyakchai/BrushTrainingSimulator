@@ -1,4 +1,4 @@
-package com.example.clabuyakchai.brushtrainingsimulator;
+package com.example.clabuyakchai.brushtrainingsimulator.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -19,6 +20,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.clabuyakchai.brushtrainingsimulator.fragments.InstructionFragment;
+import com.example.clabuyakchai.brushtrainingsimulator.R;
+import com.example.clabuyakchai.brushtrainingsimulator.fragments.SettingsFragment;
+import com.example.clabuyakchai.brushtrainingsimulator.fragments.StatisticsFragment;
 import com.example.clabuyakchai.brushtrainingsimulator.service.MyIntentService;
 import com.example.clabuyakchai.brushtrainingsimulator.sharedpreferences.Preferences;
 import com.example.clabuyakchai.brushtrainingsimulator.soap.SOAPRequest;
@@ -46,10 +51,6 @@ public class MainActivity extends AppCompatActivity
             MyIntentService.startActionDownloadStatistics(MainActivity.this);
             MyIntentService.startActionUploadStatistics(MainActivity.this);
         }
-
-        //DELETE
-//        DBQuery dbQuery = new DBQuery(MainActivity.this);
-//        dbQuery.addAllStatistics(null);
 
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(MainActivity.this,

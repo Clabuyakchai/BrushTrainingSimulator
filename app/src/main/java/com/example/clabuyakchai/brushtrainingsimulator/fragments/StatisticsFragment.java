@@ -1,7 +1,8 @@
-package com.example.clabuyakchai.brushtrainingsimulator;
+package com.example.clabuyakchai.brushtrainingsimulator.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.clabuyakchai.brushtrainingsimulator.R;
 import com.example.clabuyakchai.brushtrainingsimulator.database.DBQuery;
 import com.example.clabuyakchai.brushtrainingsimulator.model.UserStatistics;
 
@@ -78,7 +80,7 @@ public class StatisticsFragment extends Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(getActivity(), mStatistics.getDescription(), Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, mStatistics.getDescription(), Snackbar.LENGTH_LONG).show();
                 }
             });
         }

@@ -1,6 +1,7 @@
-package com.example.clabuyakchai.brushtrainingsimulator;
+package com.example.clabuyakchai.brushtrainingsimulator.fragments;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -18,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.clabuyakchai.brushtrainingsimulator.R;
 import com.example.clabuyakchai.brushtrainingsimulator.database.DBQuery;
 import com.example.clabuyakchai.brushtrainingsimulator.model.UserStatistics;
 import com.example.clabuyakchai.brushtrainingsimulator.service.MyIntentService;
@@ -35,6 +37,9 @@ import static android.content.Context.SENSOR_SERVICE;
 
 public class SimulatorFragment extends Fragment {
 
+    private static final int REQUEST_COMMENT = 123;
+    private static final String DIALOG_COMMENT = "DialogComment";
+
     private SensorManager mSensorManager;
     private Sensor mAccelerometerSensor;
     private boolean isPresent = false;
@@ -51,6 +56,9 @@ public class SimulatorFragment extends Fragment {
     private int mProgress = 0;
     private int MAX_VALUE = 0;
     private String value = null;
+
+    private UserStatistics statistics = null;
+    private FragmentManager fragmentManager = null;
 
     @Nullable
     @Override
@@ -127,7 +135,11 @@ public class SimulatorFragment extends Fragment {
                 if (mProgress < MAX_VALUE) {
                     mProgressBar.setProgress(mProgress);
                     mTextViewProgress.setText(mProgress + " /" + value);
+                } else if (MAX_VALUE == -1){
+                    mProgressBar.setProgress(mProgress);
+                    mTextViewProgress.setText(mProgress + " /" + value);
                 } else if (mProgress == MAX_VALUE){
+                    mTextViewProgress.setText(mProgress + " /" + value);
                     autofinish();
                 }
                 state1 = false;
@@ -148,9 +160,32 @@ public class SimulatorFragment extends Fragment {
 
         mProgressBar.setProgress(0);
 
-        UserStatistics statistics = new UserStatistics(mProgress, new Date().getTime(), "Nice",
+        statistics = new UserStatistics(mProgress, new Date().getTime(),
                 Preferences.getUsernameSharedPreferences(getActivity()));
 
+        fragmentManager = getActivity().getSupportFragmentManager();
+
+        CommentFragment commentFragment = CommentFragment.newInstance();
+        commentFragment.setTargetFragment(SimulatorFragment.this, REQUEST_COMMENT);
+        commentFragment.show(fragmentManager, DIALOG_COMMENT);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode != Activity.RESULT_OK){
+            return;
+        }
+
+        if(requestCode == REQUEST_COMMENT){
+            String comment = data.getStringExtra(CommentFragment.EXTRA_COMMENT);
+            if(comment != null){
+                statistics.setDescription(comment);
+                afterComment();
+            }
+        }
+    }
+
+    private void afterComment(){
         DBQuery dbQuery = new DBQuery(getActivity());
         dbQuery.addStatistics(statistics);
 
@@ -160,7 +195,6 @@ public class SimulatorFragment extends Fragment {
             Toast.makeText(getActivity(), R.string.error_internet_connection, Toast.LENGTH_SHORT).show();
         }
 
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.popBackStack();
         FragmentTransaction mFragmentTransaction = getFragmentManager().beginTransaction();
         mFragmentTransaction.replace(R.id.fragment_container_main, new InstructionFragment()).commit();

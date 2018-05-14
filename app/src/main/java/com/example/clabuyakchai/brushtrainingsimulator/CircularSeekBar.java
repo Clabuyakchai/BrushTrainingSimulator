@@ -15,6 +15,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.clabuyakchai.brushtrainingsimulator.R;
+
 public class CircularSeekBar extends View {
 
     /**

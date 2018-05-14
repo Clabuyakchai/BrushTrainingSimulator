@@ -1,4 +1,4 @@
-package com.example.clabuyakchai.brushtrainingsimulator;
+package com.example.clabuyakchai.brushtrainingsimulator.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +10,8 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.example.clabuyakchai.brushtrainingsimulator.CircularSeekBar;
+import com.example.clabuyakchai.brushtrainingsimulator.R;
 import com.example.clabuyakchai.brushtrainingsimulator.sharedpreferences.Preferences;
 
 /**
@@ -80,6 +82,7 @@ public class SettingsFragment extends Fragment{
         if(Preferences.getSettingInfinityOrNoSharedPreferences(getActivity())){
             maxCounter = Preferences.getSettingCounterSharedPreferences(getActivity());
             mCircularSeekBar.setIsTouchEnabled(true);
+            mCircularSeekBar.setProgress(maxCounter);
             mInscription.setText(R.string.settings_max_counter);
             mDisplayCounter.setText(String.valueOf(maxCounter));
 

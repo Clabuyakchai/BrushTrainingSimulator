@@ -1,4 +1,4 @@
-package com.example.clabuyakchai.brushtrainingsimulator;
+package com.example.clabuyakchai.brushtrainingsimulator.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.clabuyakchai.brushtrainingsimulator.R;
+import com.example.clabuyakchai.brushtrainingsimulator.fragments.SignInFragment;
 import com.example.clabuyakchai.brushtrainingsimulator.sharedpreferences.Preferences;
 
 public class LoginActivity extends AppCompatActivity {
@@ -15,10 +17,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        //TODO
-        Preferences.setTokenSharedPreferences(LoginActivity.this, "jvnfbniudv");
-        Preferences.setUsernameSharedPreferences(LoginActivity.this, "client");
 
         String token = Preferences.getTokenSharedPreferences(LoginActivity.this);
 

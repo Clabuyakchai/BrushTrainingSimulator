@@ -1,8 +1,9 @@
-package com.example.clabuyakchai.brushtrainingsimulator;
+package com.example.clabuyakchai.brushtrainingsimulator.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -12,12 +13,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.clabuyakchai.brushtrainingsimulator.R;
+import com.example.clabuyakchai.brushtrainingsimulator.activity.MainActivity;
 import com.example.clabuyakchai.brushtrainingsimulator.api.ApiService;
 import com.example.clabuyakchai.brushtrainingsimulator.api.Client;
 import com.example.clabuyakchai.brushtrainingsimulator.model.UserLogin;
 import com.example.clabuyakchai.brushtrainingsimulator.sharedpreferences.Preferences;
 import com.example.clabuyakchai.brushtrainingsimulator.stateinternet.StateInternet;
-import com.google.gson.Gson;
 
 import java.io.IOException;
 
@@ -100,7 +102,7 @@ public class SignInFragment extends Fragment {
                         }
                     });
                 } else {
-                    Toast.makeText(getActivity(), R.string.error_internet_connection, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, R.string.error_internet_connection, Snackbar.LENGTH_SHORT).show();
                 }
             }
         });

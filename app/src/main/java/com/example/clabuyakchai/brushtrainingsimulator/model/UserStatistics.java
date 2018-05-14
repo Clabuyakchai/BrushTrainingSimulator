@@ -20,6 +20,12 @@ public class UserStatistics {
         this.username = username;
     }
 
+    public UserStatistics(Integer counter, Long data, String username) {
+        this.counter = counter;
+        this.data = data;
+        this.username = username;
+    }
+
     public Integer getCounter() {
         return counter;
     }

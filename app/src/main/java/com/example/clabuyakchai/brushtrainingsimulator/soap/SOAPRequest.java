@@ -18,7 +18,7 @@ import java.io.IOException;
 public class SOAPRequest {
     //TODO
     private static final String NAMESPACE = "http://com.clabuyakchai/soap";
-    private static final String URL="http://192.168.5.104:8090/ws/info.wsdl";
+    private static final String URL="http://192.168.5.103:8090/ws/info.wsdl";
     private static final String METHOD_NAME = "getInfoRequest";
     private static final String SOAP_ACTION = "http://com.clabuyakchai/soap/getInfoRequest";
 
